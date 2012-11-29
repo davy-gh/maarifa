@@ -21,6 +21,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Validator.EmptyValueException;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -34,6 +35,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 
 import cz.magix.maarifa.simple.model.AbstractObject;
+import cz.magix.maarifa.simple.model.Person;
 import cz.magix.maarifa.simple.ui.annotation.UiParams;
 
 @Component
@@ -43,6 +45,9 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	// Neo4j injection
 	@Autowired
 	private Neo4jTemplate neo4j;
+	
+	@Autowired
+	private ObjectListManager objectListManager;
 
 	// final Form editorForm;
 	final BeanValidationForm<AbstractObject> editorForm;
@@ -101,8 +106,24 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 						Transaction tx = neo4j.getGraphDatabaseService().beginTx();
 
 						try {
-							neo4j.save(beanItem.getBean());
-							tx.success();
+							BeanItemContainer<Person> beanItemContainer = (BeanItemContainer<Person>) objectListManager.getUserTable().getContainerDataSource();  
+							
+							Person bean = (Person) neo4j.save(beanItem.getBean());
+
+							if (bean != null) {
+								beanItemContainer.addBean(bean);
+//								objectListManager.getUserTable().getContainerDataSource().
+//								objectListManager.getUserTable().refreshRowCache();
+								
+								for (Object iid : objectListManager.getUserTable().getContainerDataSource().getItemIds()) {
+									System.out.println("IID: " + iid);
+								}
+								
+								tx.success();
+							} else {
+								tx.failure();
+							}
+							
 						} finally {
 							tx.finish();
 						}

@@ -40,9 +40,9 @@ public class ObjectListManager extends VerticalLayout {
 	@Autowired
 	private ObjectEditor userEditor;
 	
-	// private UserBeanQuery userBeanQuery;
-	public static final String PERSISTENCE_UNIT = "feedfilter";
-
+	// Components
+	private Table userTable;
+	
 	// Actions Constants
 	private static final Action ACTION_DELETE = new Action("Delete");
 	private static final Action ACTION_CREATE_CHANNEL = new Action("Create Channel");
@@ -66,6 +66,7 @@ public class ObjectListManager extends VerticalLayout {
 	public void init() {
 		// UI components
 		//BeanItemContainer<AbstractObject> beanItemContainer = new BeanItemContainer<AbstractObject>(AbstractObject.class);
+		//TODO: udelat to genericky
 		@SuppressWarnings({ "rawtypes" })
 		BeanItemContainer beanItemContainer = new BeanItemContainer(Person.class);
 
@@ -75,7 +76,7 @@ public class ObjectListManager extends VerticalLayout {
 			beanItemContainer.addBean((Person) bean);
 		}
 		
-		final Table userTable = new Table(null, beanItemContainer);
+		userTable = new Table(null, beanItemContainer);
 
 		/*
 		 * Basic settings of root VerticalLayout
@@ -239,8 +240,18 @@ public class ObjectListManager extends VerticalLayout {
 //
 //		userContainer.applyFilters();
 	}
+
+	public Table getUserTable() {
+		return userTable;
+	}
+
+	public void setUserTable(Table userTable) {
+		this.userTable = userTable;
+	}
 	
 //	private void refreshData() {
 //		
 //	}
+	
+	
 }

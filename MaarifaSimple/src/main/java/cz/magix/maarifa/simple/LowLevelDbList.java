@@ -10,7 +10,7 @@ import org.neo4j.tooling.GlobalGraphOperations;
 public class LowLevelDbList {
 
 	public LowLevelDbList() {
-		EmbeddedGraphDatabase graphDb = new EmbeddedGraphDatabase("/tmp/neo4j");
+		EmbeddedGraphDatabase graphDb = new EmbeddedGraphDatabase(Config.NEO4J_DIR);
 		registerShutdownHook(graphDb);
 		
 		// List

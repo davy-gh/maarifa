@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
@@ -10,24 +11,28 @@
 		http://www.springframework.org/schema/data/neo4j
        	http://www.springframework.org/schema/data/neo4j/spring-neo4j-2.0.xsd">
 
-	<context:component-scan base-package="cz.magix.maarifa.simple" />
 	<context:annotation-config />
 	<context:spring-configured />
+	<context:component-scan base-package="cz.magix.maarifa.simple" />
 
-	<bean id="graphDatabaseService" class="org.neo4j.kernel.EmbeddedGraphDatabase" destroy-method="shutdown">
-		<constructor-arg value="/tmp/test-db" />
+	<bean id="graphDatabaseService" class="org.neo4j.kernel.EmbeddedGraphDatabase"
+		destroy-method="shutdown">
+		<constructor-arg value="/tmp/neo4j" />
 	</bean>
 
-	<bean id="neo4jTransactionManagerService" class="org.neo4j.kernel.impl.transaction.SpringTransactionManager">
+	<bean id="neo4jTransactionManagerService"
+		class="org.neo4j.kernel.impl.transaction.SpringTransactionManager">
 		<constructor-arg ref="graphDatabaseService" />
 	</bean>
-	
-	<bean id="neo4jTransactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+
+	<bean id="neo4jTransactionManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
 		<property name="transactionManager" ref="neo4jTransactionManagerService" />
 	</bean>
 
 	<tx:annotation-driven transaction-manager="neo4jTransactionManager" />
-<!-- 	<tx:annotation-driven mode="aspectj" transaction-manager="transactionManager" /> -->
+	<!-- <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager" 
+		/> -->
 
 	<neo4j:config graphDatabaseService="graphDatabaseService" />
 	<neo4j:repositories base-package="cz.magix.feedfilter.dao" />
