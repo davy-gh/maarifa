@@ -1,13 +1,25 @@
 package cz.magix.maarifa.simple.model;
 
+import org.springframework.data.neo4j.annotation.NodeEntity;
+
+import cz.magix.maarifa.simple.ui.annotation.UiParams;
+
+@NodeEntity
 public class Address extends AbstractObject {
+	@UiParams(position=1)
+	private String country;
+
+	@UiParams(position=2)
 	private String street;
+	@UiParams(position=3)
 	private int descriptioningNumber;
+	@UiParams(position=4)
 	private int orientationNumber;
 	
+	@UiParams(position=5)
 	private String city;
+	@UiParams(position=6)
 	private String state;
-	private String country;
 	
 	/*
 	 * Getters & Setters

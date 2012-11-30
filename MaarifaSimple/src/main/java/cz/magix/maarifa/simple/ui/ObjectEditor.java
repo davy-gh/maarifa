@@ -20,8 +20,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Validator.EmptyValueException;
 import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -35,7 +35,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 
 import cz.magix.maarifa.simple.model.AbstractObject;
-import cz.magix.maarifa.simple.model.Person;
 import cz.magix.maarifa.simple.ui.annotation.UiParams;
 
 @Component
@@ -45,7 +44,7 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	// Neo4j injection
 	@Autowired
 	private Neo4jTemplate neo4j;
-	
+
 	@Autowired
 	private ObjectListManager objectListManager;
 
@@ -106,24 +105,24 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 						Transaction tx = neo4j.getGraphDatabaseService().beginTx();
 
 						try {
-							BeanItemContainer<Person> beanItemContainer = (BeanItemContainer<Person>) objectListManager.getUserTable().getContainerDataSource();  
-							
-							Person bean = (Person) neo4j.save(beanItem.getBean());
+							BeanContainer<Long, AbstractObject> beanContainer = (BeanContainer<Long, AbstractObject>) objectListManager.getUserTable().getContainerDataSource();
+
+							AbstractObject bean = neo4j.save(beanItem.getBean());
 
 							if (bean != null) {
-								beanItemContainer.addBean(bean);
-//								objectListManager.getUserTable().getContainerDataSource().
-//								objectListManager.getUserTable().refreshRowCache();
-								
+								beanContainer.addBean(bean);
+								// objectListManager.getUserTable().getContainerDataSource().
+								// objectListManager.getUserTable().refreshRowCache();
+
 								for (Object iid : objectListManager.getUserTable().getContainerDataSource().getItemIds()) {
 									System.out.println("IID: " + iid);
 								}
-								
+
 								tx.success();
 							} else {
 								tx.failure();
 							}
-							
+
 						} finally {
 							tx.finish();
 						}
@@ -221,7 +220,7 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 			Map<Integer, String> visibleProperties = new HashMap<Integer, String>();
 			for (Object property : editorForm.getItemDataSource().getItemPropertyIds()) {
 				if (property instanceof String) {
-					if (!"nodeId".equals((String) property)) {
+					if (!("nodeId".equals((String) property) || "nodeDescription".equals((String) property))) {
 						try {
 							java.lang.reflect.Field classField = object.getClass().getDeclaredField((String) property);
 
@@ -285,28 +284,29 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	 */
 	@Override
 	public Field createField(Item item, Object propertyId, com.vaadin.ui.Component uiContext) {
+		String pid = (String) propertyId;
+
+		// Working values
 		Field field;
-		// String pid = (String) propertyId;
 
-		System.out.println("Property ID: " + propertyId);
+		// Identify the fields by name
+		if ("country".equals(pid)) {
+			// field = new TextField("Name");
+			// } else if ("city".equals(pid)) {
+			//TODO: add list of official countries bye ISO something, + suitable list
+			Select select = new Select("Country");
+			select.addItem("Czech Republic");
+			select.addItem("USA");
+			select.addItem("Afghanistan");
+			select.addItem("UK");
+			select.addItem("Taiwan");
+			select.setNewItemsAllowed(true);
 
-		// Identify the fields by
-		// if ("name".equals(pid)) {
-		// field = new TextField("Name");
-		// } else if ("city".equals(pid)) {
-		// Select select = new Select("City");
-		// select.addItem("Berlin");
-		// select.addItem("Helsinki");
-		// select.addItem("London");
-		// select.addItem("New York");
-		// select.addItem("Turku");
-		// select.setNewItemsAllowed(true);
-		//
-		// field = select;
-		//
-		// } else {
-		field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
-		// }
+			field = select;
+
+		} else {
+			field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
+		}
 
 		// Last specific checks
 		if (field instanceof TextField) {
@@ -315,4 +315,6 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 
 		return field;
 	}
+	
+	
 }
