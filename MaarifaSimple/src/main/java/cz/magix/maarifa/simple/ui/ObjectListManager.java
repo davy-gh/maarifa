@@ -3,6 +3,7 @@ package cz.magix.maarifa.simple.ui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -32,6 +34,9 @@ public class ObjectListManager extends VerticalLayout {
 	// Serialization stuff
 	private static final long serialVersionUID = 1L;
 
+	@Autowired
+	private Logger log;
+
 	// Neo4j injection
 	@Autowired
 	private Neo4jTemplate neo4j;
@@ -41,7 +46,7 @@ public class ObjectListManager extends VerticalLayout {
 
 	// Components
 	private final Table userTable;
-	//private final BeanItemContainer<AbstractObject> beanItemContainer;
+	// private final BeanItemContainer<AbstractObject> beanItemContainer;
 	private final BeanContainer<Long, AbstractObject> beanContainer;
 
 	// Actions Constants
@@ -63,7 +68,7 @@ public class ObjectListManager extends VerticalLayout {
 		beanContainer = new BeanContainer<Long, AbstractObject>(AbstractObject.class);
 
 		// Use the name property as the item ID of the bean
-		//TODO: magic constants
+		// TODO: magic constants
 		beanContainer.setBeanIdProperty("nodeId");
 
 		userTable = new Table(null, beanContainer);
@@ -101,12 +106,9 @@ public class ObjectListManager extends VerticalLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// final ObjectEditor userEditor = new ObjectEditor(neo4j,
-				// null);
 				userEditor.setPositionX(100);
 				userEditor.setPositionY(100);
 
-				//TODO: tady se nejak musi vymazat aktualni objekt,, pripadne nacist objekt pro editaci
 				getApplication().getMainWindow().addWindow(userEditor);
 			}
 		});
@@ -121,27 +123,32 @@ public class ObjectListManager extends VerticalLayout {
 			// @SuppressWarnings("unchecked")
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// for (Long itemId : (Set<Long>) userTable.getValue()) {
-				// getApplication().getMainWindow().addWindow(new
-				// UserEditor((EntityItem<User>) userTable.getItem(itemId),
-				// userContainer, groupTable));
-				// }
+				userEditor.setPositionX(100);
+				userEditor.setPositionY(100);
+
+				getApplication().getMainWindow().addWindow(userEditor);
+
+				// Reset to edit
+				userEditor.resetToEdit();
 			}
 		});
 		editUserButton.setEnabled(false);
 		userToolbar.addComponent(editUserButton);
 
 		// Create delete button
-		final Button deleteUserButton = new Button("Delete user");
+		final Button deleteUserButton = new Button("Delete object");
 		deleteUserButton.addListener(new Button.ClickListener() {
 			private static final long serialVersionUID = 1L;
 
 			// @SuppressWarnings("unchecked")
 			@Override
+			@Transactional
 			public void buttonClick(ClickEvent event) {
-				// for (Long itemId : (Set<Long>) userTable.getValue()) {
-				// userContainer.removeItem(itemId);
-				// }
+				if (userTable.getValue() != null) {
+					log.info("Deleting: " + userTable.getValue().getClass().getCanonicalName());
+
+					neo4j.delete(userTable.getValue());
+				}
 			}
 		});
 		deleteUserButton.setEnabled(false);
@@ -149,7 +156,7 @@ public class ObjectListManager extends VerticalLayout {
 
 		// Search field
 		final TextField searchUserField = new TextField();
-		searchUserField.setInputPrompt("Search by name");
+		searchUserField.setInputPrompt("Search by indexed field");
 		searchUserField.addListener(new TextChangeListener() {
 			private static final long serialVersionUID = 1L;
 

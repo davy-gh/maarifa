@@ -15,6 +15,10 @@
 	<context:spring-configured />
 	<context:component-scan base-package="cz.magix.maarifa.simple" />
 
+	<bean id="log" class="java.util.logging.Logger" factory-method="getLogger">
+		<constructor-arg value="cz.magix.maarifa.simple" />
+	</bean>
+
 	<bean id="graphDatabaseService" class="org.neo4j.kernel.EmbeddedGraphDatabase"
 		destroy-method="shutdown">
 		<constructor-arg value="/tmp/neo4j" />

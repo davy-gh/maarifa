@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.neo4j.graphdb.Transaction;
 import org.reflections.Reflections;
@@ -40,6 +41,9 @@ import cz.magix.maarifa.simple.ui.annotation.UiParams;
 @Component
 public class ObjectEditor extends Window implements FormFieldFactory {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+    private Logger log;
 
 	// Neo4j injection
 	@Autowired
@@ -49,9 +53,10 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	private ObjectListManager objectListManager;
 
 	// final Form editorForm;
-	final BeanValidationForm<AbstractObject> editorForm;
-	final Button saveButton;
-	final Button cancelButton;
+	private final BeanValidationForm<AbstractObject> editorForm;
+	private final Button saveButton;
+	private final Button cancelButton;
+	private final ComboBox typeOfObject;
 
 	/**
 	 * Class for editing users
@@ -64,13 +69,13 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	 * @param groupTable
 	 */
 	public ObjectEditor() {
-		// Dialog settings
-		setCaption("Create/Edit Object");
+		setModal(true);
 		setSizeUndefined();
 		getContent().setSizeUndefined();
 
 		// Add ComboBox to the top
-		addComponent(createComboFields());
+		typeOfObject = createComboFields(); 
+		addComponent(typeOfObject);
 
 		// Create form and add to the window
 		editorForm = new BeanValidationForm<AbstractObject>(AbstractObject.class);
@@ -98,26 +103,17 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 					editorForm.commit();
 
 					BeanItem<? extends AbstractObject> beanItem = (BeanItem<? extends AbstractObject>) editorForm.getItemDataSource();
+					BeanContainer<Long, AbstractObject> beanContainer = (BeanContainer<Long, AbstractObject>) objectListManager.getUserTable().getContainerDataSource();
 
 					if (beanItem != null) {
-						System.out.println("Co to je: " + beanItem.getClass().getName());
-
+						//TODO: predelat na annotace
 						Transaction tx = neo4j.getGraphDatabaseService().beginTx();
 
 						try {
-							BeanContainer<Long, AbstractObject> beanContainer = (BeanContainer<Long, AbstractObject>) objectListManager.getUserTable().getContainerDataSource();
-
 							AbstractObject bean = neo4j.save(beanItem.getBean());
 
 							if (bean != null) {
 								beanContainer.addBean(bean);
-								// objectListManager.getUserTable().getContainerDataSource().
-								// objectListManager.getUserTable().refreshRowCache();
-
-								for (Object iid : objectListManager.getUserTable().getContainerDataSource().getItemIds()) {
-									System.out.println("IID: " + iid);
-								}
-
 								tx.success();
 							} else {
 								tx.failure();
@@ -126,9 +122,6 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 						} finally {
 							tx.finish();
 						}
-
-					} else {
-						System.out.println("Je to null");
 					}
 				} catch (EmptyValueException e) {
 					return;
@@ -137,6 +130,7 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 				}
 
 				close();
+				resetForm();	
 			}
 		});
 
@@ -148,11 +142,23 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 			public void buttonClick(ClickEvent event) {
 				editorForm.discard();
 				close();
+				resetForm();	
 			}
 		});
 
 		editorForm.getFooter().addComponent(saveButton);
 		editorForm.getFooter().addComponent(cancelButton);
+		
+		// Listener
+		addListener(new ComponentAttachListener() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void componentAttachedToContainer(ComponentAttachEvent event) {
+				// TODO Auto-generated method stub
+				log.info("Attached");
+			}
+		});
 	}
 
 	/**
@@ -164,30 +170,30 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 		Reflections reflections = new Reflections(AbstractObject.class.getPackage().getName());
 		Set<Class<? extends AbstractObject>> modelClasses = reflections.getSubTypesOf(AbstractObject.class);
 
-		final ComboBox typeOfObject = new ComboBox("Select new type of object", modelClasses);
+		final ComboBox typeOfObjectComboBox = new ComboBox("Select new type of object", modelClasses);
 
 		for (Class<? extends AbstractObject> item : modelClasses) {
-			typeOfObject.addItem(item);
-			typeOfObject.setItemCaption(item, item.getSimpleName());
+			typeOfObjectComboBox.addItem(item);
+			typeOfObjectComboBox.setItemCaption(item, item.getSimpleName());
 		}
 
-		typeOfObject.setItemCaptionMode(Select.ITEM_CAPTION_MODE_EXPLICIT_DEFAULTS_ID);
-		typeOfObject.setSizeFull();
-		typeOfObject.setImmediate(true);
+		typeOfObjectComboBox.setItemCaptionMode(Select.ITEM_CAPTION_MODE_EXPLICIT_DEFAULTS_ID);
+		typeOfObjectComboBox.setSizeFull();
+		typeOfObjectComboBox.setImmediate(true);
 
-		typeOfObject.addListener(new Property.ValueChangeListener() {
+		typeOfObjectComboBox.addListener(new Property.ValueChangeListener() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				@SuppressWarnings("unchecked")
-				Class<AbstractObject> objectClass = (Class<AbstractObject>) typeOfObject.getValue();
+				Class<AbstractObject> objectClass = (Class<AbstractObject>) typeOfObjectComboBox.getValue();
 				createFormFields(editorForm, objectClass);
 				System.out.println("Spravne");
 			}
 		});
 
-		return typeOfObject;
+		return typeOfObjectComboBox;
 	}
 
 	/**
@@ -198,14 +204,12 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	 * @return
 	 */
 	private AbstractObject createFormFields(Form editorForm, Class<AbstractObject> modelClass) {
+		// Remove all fields
+		editorForm.removeAllProperties();
+
 		if (modelClass == null) {
 			return null;
 		}
-
-		System.out.println(modelClass.getName());
-
-		// Remove all fields
-		editorForm.removeAllProperties();
 
 		AbstractObject object = null;
 
@@ -315,6 +319,26 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 
 		return field;
 	}
+
+	/**
+	 * /TODO: doc it
+	 */
+	private void resetForm() {
+		typeOfObject.setValue(null);
+	}
 	
 	
+	/**
+	 * TODO: set to edit
+	 */
+	public void resetToEdit() {
+		// Get actual value
+		Object object = objectListManager.getUserTable().getValue();
+		
+		// Set class
+		typeOfObject.setValue(object.getClass());
+
+		// Set value
+		editorForm.setValue(object);
+	}
 }
