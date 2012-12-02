@@ -46,7 +46,6 @@ public class ObjectListManager extends VerticalLayout {
 
 	// Components
 	private final Table userTable;
-	// private final BeanItemContainer<AbstractObject> beanItemContainer;
 	private final BeanContainer<Long, AbstractObject> beanContainer;
 
 	// Actions Constants
@@ -185,10 +184,6 @@ public class ObjectListManager extends VerticalLayout {
 		// turn on column reordering and collapsing
 		userTable.setColumnReorderingAllowed(true);
 		userTable.setColumnCollapsingAllowed(true);
-
-		// Order of columns
-		// userTable.setVisibleColumns(new String[] { User.NAME, User.PASSWORD,
-		// User.REG_DATE, User.GROUPS, User.CHANNELS, User.FILTERS });
 
 		userTable.addListener(new Property.ValueChangeListener() {
 			private static final long serialVersionUID = 1L;
