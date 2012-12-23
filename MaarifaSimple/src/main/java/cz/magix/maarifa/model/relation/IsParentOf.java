@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.annotation.StartNode;
 
 import cz.magix.maarifa.model.AbstractRelationship;
 import cz.magix.maarifa.model.object.Person;
+import cz.magix.maarifa.model.relation.personal.IsChildOf;
 
 @RelationshipEntity
 public class IsParentOf extends AbstractRelationship {

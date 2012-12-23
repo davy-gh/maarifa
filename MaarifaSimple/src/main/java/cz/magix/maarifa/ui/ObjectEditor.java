@@ -13,7 +13,6 @@ import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vaadin.addon.beanvalidation.BeanValidationForm;
@@ -28,6 +27,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
@@ -38,8 +38,9 @@ import com.vaadin.ui.Window;
 
 import cz.magix.maarifa.model.AbstractObject;
 import cz.magix.maarifa.ui.annotation.UiParams;
+import cz.magix.maarifa.util.NameUtil;
 
-@Component
+@org.springframework.stereotype.Component
 @Scope("prototype")
 public class ObjectEditor extends Window implements FormFieldFactory {
 	private static final long serialVersionUID = 1L;
@@ -289,27 +290,24 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	 * @return
 	 */
 	@Override
-	public Field createField(Item item, Object propertyId, com.vaadin.ui.Component uiContext) {
-		String pid = (String) propertyId;
-
+	public Field createField(Item item, Object propertyId, Component uiContext) {
+		String id = (String) propertyId;
+		Class<?> type = item.getItemProperty(propertyId).getType(); 
+		
 		// Working values
 		Field field;
 
 		// Identify the fields by name
-		if ("country".equals(pid)) {
-			// field = new TextField("Name");
-			// } else if ("city".equals(pid)) {
-			//TODO: add list of official countries bye ISO something, + suitable list
-			Select select = new Select("Country");
-			select.addItem("Czech Republic");
-			select.addItem("USA");
-			select.addItem("Afghanistan");
-			select.addItem("UK");
-			select.addItem("Taiwan");
-			select.setNewItemsAllowed(true);
-
-			field = select;
-
+		if (type.isEnum()) {
+//			Select select = new Select(NameUtil.normalizeCamelCase(id));
+//			
+//			for (Object enumItem : type.getEnumConstants()) { 
+////				select.addItem(NameUtil.normalizeUpperCase(enumItem.toString()));
+//				select.addItem(enumItem.toString());
+//			}
+//			
+//			field = select;
+			return null;
 		} else {
 			field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
 		}

@@ -4,30 +4,42 @@
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	id="WebApp_ID" version="2.4">
+
 	<display-name>FeedFilter</display-name>
+
+<!-- 	<context-param> -->
+<!-- 		<description>Vaadin production mode</description> -->
+<!-- 		<param-name>productionMode</param-name> -->
+<!-- 		<param-value>false</param-value> -->
+<!-- 	</context-param> -->
+
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>Maarifa Application</servlet-name> -->
+<!-- 		<servlet-class>ch.frankel.vaadin.spring.SpringApplicationServlet</servlet-class> -->
+<!-- 		<init-param> -->
+<!-- 			<param-name>applicationBeanName</param-name> -->
+<!-- 			<param-value>maarifaUserInterface</param-value> -->
+<!-- 		</init-param> -->
+<!-- 	</servlet> -->
+
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>Maarifa Application</servlet-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+
 	<context-param>
-		<description>Vaadin production mode</description>
-		<param-name>productionMode</param-name>
-		<param-value>false</param-value>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:applicationContext.xml</param-value>
 	</context-param>
-	<servlet>
-		<servlet-name>Maarifa Application</servlet-name>
-		<servlet-class>ch.frankel.vaadin.spring.SpringApplicationServlet</servlet-class>
-		<init-param>
-			<param-name>applicationBeanName</param-name>
-			<param-value>maarifaUserInterface</param-value>
-		</init-param>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Maarifa Application</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>	
+	</listener>
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -36,4 +48,5 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+
 </web-app>

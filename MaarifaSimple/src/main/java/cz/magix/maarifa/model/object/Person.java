@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 import cz.magix.maarifa.model.AbstractObject;
@@ -12,52 +13,55 @@ import cz.magix.maarifa.ui.annotation.UiParams;
 
 @NodeEntity
 public class Person extends AbstractObject {
+
+	@UiParams(position = 1)
+	private Country nationality;
+
 	// TODO: implements this
 	// @NoNewLineAfter
-	@UiParams(position = 1)
+	@UiParams(position = 2)
 	private String[] honorificPrefix;
 
 	@NotNull
-	@UiParams(position = 2)
+	@UiParams(position = 3)
 	// @NoNewLineAfter
+	@Indexed
 	private String firstName;
 
 	@NotNull
-	@UiParams(position = 3)
+	@UiParams(position = 4)
 	// @NoNewLineAfter
+	@Indexed
 	private String lastName;
 
-	@UiParams(position = 3)
+	@UiParams(position = 5)
 	private String[] honorificSuffix;
 
-	@UiParams(position = 3)
+	@UiParams(position = 6)
 	// TODO: implement this
 	// @UiShowIf(gender=FEMALE)
 	private String birthLastName;
 
-	@UiParams(position = 4)
+	@UiParams(position = 7)
 	private String[] additionalName;
 
-	@UiParams(position = 5)
+	@UiParams(position = 8)
 	private String[] aliasName;
 
-	@UiParams(position = 6)
+	@UiParams(position = 9)
 	private String birthNumber;
 
-	@UiParams(position = 7)
+	@UiParams(position = 10)
 	private Date birthDate;
 
-	@UiParams(position = 8)
+	@UiParams(position = 11)
 	private Date deathDate;
 
-	@UiParams(position = 9)
+	@UiParams(position = 12)
 	private Gender gender;
 
-	@UiParams(position = 10)
+	@UiParams(position = 13)
 	private FamilyStatus familyStatus;
-
-	@UiParams(position = 11)
-	private Country nationality;
 
 	/*
 	 * Getters & Setters

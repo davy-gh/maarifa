@@ -1,4 +1,4 @@
-package cz.magix.maarifa.model.object;
+package cz.magix.maarifa.model.object.virtual;
 
 import org.joda.time.DateTime;
 
