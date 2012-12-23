@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
+import cz.magix.maarifa.simple.model.AbstractObject;
 import cz.magix.maarifa.simple.ui.annotation.UiParams;
 
 @NodeEntity

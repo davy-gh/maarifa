@@ -1,4 +1,4 @@
-package cz.magix.maarifa.simple.model.relation;
+package cz.magix.maarifa.simple.model;
 
 public abstract class AbstractRelationship {
 	

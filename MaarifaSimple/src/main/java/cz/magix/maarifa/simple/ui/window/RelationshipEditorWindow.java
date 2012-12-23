@@ -4,24 +4,32 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
-import cz.magix.maarifa.simple.ui.composite.ObjectSearchComposite;
+import cz.magix.maarifa.simple.ui.composite.RelationshipEditorComposite;
 
 @org.springframework.stereotype.Component
 public class RelationshipEditorWindow extends Window {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	private ObjectSearchComposite objectSearchComposite;
+	private RelationshipEditorComposite relationshipEditorComposite;
 	
 	@PostConstruct
 	public void init() {
-		setContent(objectSearchComposite);
+		// Set caption
+		setCaption("Edit relationship between two objects");
 		
-		objectSearchComposite.getCancelButton().addListener(new ClickListener() {
+		// set size and position
+		setWidth("300px");
+		center();
+
+		// Set content
+		setContent(relationshipEditorComposite);
+		
+		relationshipEditorComposite.getCancelButton().addListener(new ClickListener() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

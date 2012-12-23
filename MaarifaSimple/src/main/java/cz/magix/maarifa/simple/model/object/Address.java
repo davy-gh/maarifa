@@ -1,7 +1,10 @@
 package cz.magix.maarifa.simple.model.object;
 
+import javax.annotation.Nonnegative;
+
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
+import cz.magix.maarifa.simple.model.AbstractObject;
 import cz.magix.maarifa.simple.ui.annotation.UiParams;
 
 @NodeEntity
@@ -12,8 +15,10 @@ public class Address extends AbstractObject {
 	@UiParams(position=2)
 	private String street;
 	@UiParams(position=3)
+	@Nonnegative
 	private int descriptioningNumber;
 	@UiParams(position=4)
+	@Nonnegative
 	private int orientationNumber;
 	
 	@UiParams(position=5)

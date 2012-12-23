@@ -4,6 +4,7 @@ import org.springframework.data.neo4j.annotation.EndNode;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
 
+import cz.magix.maarifa.simple.model.AbstractRelationship;
 import cz.magix.maarifa.simple.model.object.Address;
 import cz.magix.maarifa.simple.model.object.Person;
 

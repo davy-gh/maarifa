@@ -35,7 +35,7 @@ import com.vaadin.ui.Select;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 
-import cz.magix.maarifa.simple.model.object.AbstractObject;
+import cz.magix.maarifa.simple.model.AbstractObject;
 import cz.magix.maarifa.simple.ui.annotation.UiParams;
 
 @Component

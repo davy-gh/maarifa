@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import org.neo4j.graphdb.Transaction;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +36,11 @@ import com.vaadin.ui.Select;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 
-import cz.magix.maarifa.simple.model.object.AbstractObject;
+import cz.magix.maarifa.simple.model.AbstractObject;
 import cz.magix.maarifa.simple.ui.annotation.UiParams;
 
 @Component
+@Scope("prototype")
 public class ObjectEditor extends Window implements FormFieldFactory {
 	private static final long serialVersionUID = 1L;
 	

@@ -137,6 +137,22 @@ public class ObjectSearchComposite extends CustomComponent {
 
 	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
 
+	
+
+	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
+
+	
+
+	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
+
+	
+
+	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
+
+	
+
+	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
+
 	private static final long serialVersionUID = 1L;
 
 	
@@ -276,7 +292,6 @@ public class ObjectSearchComposite extends CustomComponent {
 		fullTextSearchField.setImmediate(false);
 		fullTextSearchField.setWidth("-1px");
 		fullTextSearchField.setHeight("-1px");
-		fullTextSearchField.setSecret(false);
 		simpleSearchLayout.addComponent(fullTextSearchField);
 		
 		return simpleSearchLayout;

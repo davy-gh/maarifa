@@ -2,6 +2,8 @@ package cz.magix.maarifa.simple.model.object;
 
 import org.joda.time.DateTime;
 
+import cz.magix.maarifa.simple.model.AbstractObject;
+
 public class NewsArticle extends AbstractObject {
 	private String title;
 	private DateTime publishingDateTime;

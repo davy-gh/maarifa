@@ -2,7 +2,9 @@ package cz.magix.maarifa.simple.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -26,8 +28,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window.Notification;
 
-import cz.magix.maarifa.simple.model.object.AbstractObject;
+import cz.magix.maarifa.simple.model.AbstractObject;
 import cz.magix.maarifa.simple.ui.window.ObjectSearchWindow;
 import cz.magix.maarifa.simple.ui.window.RelationshipEditorWindow;
 
@@ -170,9 +173,6 @@ public class ObjectListManager extends VerticalLayout {
 			@Override
 			@Transactional
 			public void buttonClick(ClickEvent event) {
-				//TODO: check exactly two relationship must be selected
-				
-				
 				getApplication().getMainWindow().addWindow(objectSearchWindow);
 			}
 		});
@@ -187,15 +187,27 @@ public class ObjectListManager extends VerticalLayout {
 			@Override
 			@Transactional
 			public void buttonClick(ClickEvent event) {
-				getApplication().getMainWindow().addWindow(relationshipEditorWindow);
+				// check exactly two relationship must be selected
+				if (objectsTable.getValue() instanceof Collection) {
+					@SuppressWarnings("unchecked")
+					Set<Object> selectedIdSet = (Set<Object>) objectsTable.getValue(); 
+					if (selectedIdSet.  size() == 2) {
+						getApplication().getMainWindow().addWindow(relationshipEditorWindow);
+					}
+					else {
+						getWindow().showNotification("Exactly two object must be selected", Notification.TYPE_WARNING_MESSAGE);
+					}
+				} else {
+					getWindow().showNotification("Exactly two object must be selected", Notification.TYPE_WARNING_MESSAGE);
+				}
 			}
 		});
 		objectManagerToolbar.addComponent(createRelationshipButton);
 
 		// Search field
-		final TextField searchUserField = new TextField();
-		searchUserField.setInputPrompt("Search by indexed field");
-		searchUserField.addListener(new TextChangeListener() {
+		final TextField searchObjectField = new TextField();
+		searchObjectField.setInputPrompt("Search by indexed field");
+		searchObjectField.addListener(new TextChangeListener() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -204,9 +216,9 @@ public class ObjectListManager extends VerticalLayout {
 				updateUserFilters();
 			}
 		});
-		objectManagerToolbar.addComponent(searchUserField);
-		objectManagerToolbar.setExpandRatio(searchUserField, 1);
-		objectManagerToolbar.setComponentAlignment(searchUserField, Alignment.TOP_RIGHT);
+		objectManagerToolbar.addComponent(searchObjectField);
+		objectManagerToolbar.setExpandRatio(searchObjectField, 1);
+		objectManagerToolbar.setComponentAlignment(searchObjectField, Alignment.TOP_RIGHT);
 
 		/*
 		 * User Table
