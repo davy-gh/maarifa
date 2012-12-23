@@ -11,15 +11,15 @@
 		<param-value>false</param-value>
 	</context-param>
 	<servlet>
-		<servlet-name>Maarifa Simple Application</servlet-name>
+		<servlet-name>Maarifa Application</servlet-name>
 		<servlet-class>ch.frankel.vaadin.spring.SpringApplicationServlet</servlet-class>
 		<init-param>
 			<param-name>applicationBeanName</param-name>
-			<param-value>maarifaSimpleApplication</param-value>
+			<param-value>maarifaUserInterface</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Maarifa Simple Application</servlet-name>
+		<servlet-name>Maarifa Application</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 	<listener>
