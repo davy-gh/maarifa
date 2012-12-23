@@ -1,4 +1,4 @@
-package cz.magix.maarifa.simple.model;
+package cz.magix.maarifa.simple.model.object;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

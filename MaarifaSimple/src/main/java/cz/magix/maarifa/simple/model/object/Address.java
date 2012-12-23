@@ -1,4 +1,4 @@
-package cz.magix.maarifa.simple.model;
+package cz.magix.maarifa.simple.model.object;
 
 import org.springframework.data.neo4j.annotation.NodeEntity;
 

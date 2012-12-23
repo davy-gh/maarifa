@@ -39,7 +39,7 @@ import cz.magix.maarifa.simple.model.object.AbstractObject;
 import cz.magix.maarifa.simple.ui.annotation.UiParams;
 
 @Component
-public class ObjectEditor extends Window implements FormFieldFactory {
+public class ObjectSearch extends Window implements FormFieldFactory {
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired
@@ -68,7 +68,7 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	 * @param userContainer
 	 * @param groupTable
 	 */
-	public ObjectEditor() {
+	public ObjectSearch() {
 		setModal(true);
 		setSizeUndefined();
 		getContent().setSizeUndefined();

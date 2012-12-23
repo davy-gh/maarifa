@@ -27,7 +27,9 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import cz.magix.maarifa.simple.model.AbstractObject;
+import cz.magix.maarifa.simple.model.object.AbstractObject;
+import cz.magix.maarifa.simple.ui.window.ObjectSearchWindow;
+import cz.magix.maarifa.simple.ui.window.RelationshipEditorWindow;
 
 @Component
 public class ObjectListManager extends VerticalLayout {
@@ -44,8 +46,14 @@ public class ObjectListManager extends VerticalLayout {
 	@Autowired
 	private ObjectEditor userEditor;
 
+	@Autowired
+	private ObjectSearchWindow objectSearchWindow;
+
+	@Autowired
+	private RelationshipEditorWindow relationshipEditorWindow;
+
 	// Components
-	private final Table userTable;
+	private final Table objectsTable;
 	private final BeanContainer<Long, AbstractObject> beanContainer;
 
 	// Actions Constants
@@ -70,7 +78,7 @@ public class ObjectListManager extends VerticalLayout {
 		// TODO: magic constants
 		beanContainer.setBeanIdProperty("nodeId");
 
-		userTable = new Table(null, beanContainer);
+		objectsTable = new Table(null, beanContainer);
 	}
 
 	@PostConstruct
@@ -92,10 +100,10 @@ public class ObjectListManager extends VerticalLayout {
 		/*
 		 * User Panel Fields and save
 		 */
-		final HorizontalLayout userToolbar = new HorizontalLayout();
-		userToolbar.setWidth("100%");
-		addComponent(userToolbar);
-		setExpandRatio(userToolbar, 0);
+		final HorizontalLayout objectManagerToolbar = new HorizontalLayout();
+		objectManagerToolbar.setWidth("100%");
+		addComponent(objectManagerToolbar);
+		setExpandRatio(objectManagerToolbar, 0);
 
 		// Create new user button
 		final Button newUserButton = new Button("Add object");
@@ -111,7 +119,7 @@ public class ObjectListManager extends VerticalLayout {
 				getApplication().getMainWindow().addWindow(userEditor);
 			}
 		});
-		userToolbar.addComponent(newUserButton);
+		objectManagerToolbar.addComponent(newUserButton);
 
 		// Create edit button
 		final Button editUserButton = new Button("Edit object");
@@ -132,7 +140,7 @@ public class ObjectListManager extends VerticalLayout {
 			}
 		});
 		editUserButton.setEnabled(false);
-		userToolbar.addComponent(editUserButton);
+		objectManagerToolbar.addComponent(editUserButton);
 
 		// Create delete button
 		final Button deleteUserButton = new Button("Delete object");
@@ -143,15 +151,46 @@ public class ObjectListManager extends VerticalLayout {
 			@Override
 			@Transactional
 			public void buttonClick(ClickEvent event) {
-				if (userTable.getValue() != null) {
-					log.info("Deleting: " + userTable.getValue().getClass().getCanonicalName());
+				if (objectsTable.getValue() != null) {
+					log.info("Deleting: " + objectsTable.getValue().getClass().getCanonicalName());
 
-					neo4j.delete(userTable.getValue());
+					neo4j.delete(objectsTable.getValue());
 				}
 			}
 		});
 		deleteUserButton.setEnabled(false);
-		userToolbar.addComponent(deleteUserButton);
+		objectManagerToolbar.addComponent(deleteUserButton);
+
+		// Create find button
+		final Button findButton = new Button("Find object");
+		findButton.addListener(new Button.ClickListener() {
+			private static final long serialVersionUID = 1L;
+
+			// @SuppressWarnings("unchecked")
+			@Override
+			@Transactional
+			public void buttonClick(ClickEvent event) {
+				//TODO: check exactly two relationship must be selected
+				
+				
+				getApplication().getMainWindow().addWindow(objectSearchWindow);
+			}
+		});
+		objectManagerToolbar.addComponent(findButton);
+
+		// Create find button
+		final Button createRelationshipButton = new Button("Create relationship...");
+		createRelationshipButton.addListener(new Button.ClickListener() {
+			private static final long serialVersionUID = 1L;
+
+			// @SuppressWarnings("unchecked")
+			@Override
+			@Transactional
+			public void buttonClick(ClickEvent event) {
+				getApplication().getMainWindow().addWindow(relationshipEditorWindow);
+			}
+		});
+		objectManagerToolbar.addComponent(createRelationshipButton);
 
 		// Search field
 		final TextField searchUserField = new TextField();
@@ -165,27 +204,27 @@ public class ObjectListManager extends VerticalLayout {
 				updateUserFilters();
 			}
 		});
-		userToolbar.addComponent(searchUserField);
-		userToolbar.setExpandRatio(searchUserField, 1);
-		userToolbar.setComponentAlignment(searchUserField, Alignment.TOP_RIGHT);
+		objectManagerToolbar.addComponent(searchUserField);
+		objectManagerToolbar.setExpandRatio(searchUserField, 1);
+		objectManagerToolbar.setComponentAlignment(searchUserField, Alignment.TOP_RIGHT);
 
 		/*
 		 * User Table
 		 */
 		// size
-		userTable.setSizeFull();
+		objectsTable.setSizeFull();
 
 		// Set atrributes like - selectable etc.
-		userTable.setSelectable(true);
-		userTable.setMultiSelect(true);
-		userTable.setImmediate(true); // react at once when something is
+		objectsTable.setSelectable(true);
+		objectsTable.setMultiSelect(true);
+		objectsTable.setImmediate(true); // react at once when something is
 										// selected
 
 		// turn on column reordering and collapsing
-		userTable.setColumnReorderingAllowed(true);
-		userTable.setColumnCollapsingAllowed(true);
+		objectsTable.setColumnReorderingAllowed(true);
+		objectsTable.setColumnCollapsingAllowed(true);
 
-		userTable.addListener(new Property.ValueChangeListener() {
+		objectsTable.addListener(new Property.ValueChangeListener() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -200,7 +239,7 @@ public class ObjectListManager extends VerticalLayout {
 		});
 
 		// Actions (a.k.a context menu)
-		userTable.addActionHandler(new Action.Handler() {
+		objectsTable.addActionHandler(new Action.Handler() {
 			private static final long serialVersionUID = 1L;
 
 			public Action[] getActions(Object target, Object sender) {
@@ -218,8 +257,8 @@ public class ObjectListManager extends VerticalLayout {
 		});
 
 		// Finally add to the table
-		addComponent(userTable);
-		setExpandRatio(userTable, 1);
+		addComponent(objectsTable);
+		setExpandRatio(objectsTable, 1);
 	}
 
 	/*
@@ -253,6 +292,6 @@ public class ObjectListManager extends VerticalLayout {
 	 * Getters & Setters
 	 */
 	public Table getUserTable() {
-		return userTable;
+		return objectsTable;
 	}
 }
