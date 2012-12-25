@@ -1,8 +1,10 @@
 package cz.magix.maarifa.ui;
 
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
-import org.springframework.stereotype.Component;
 
 import com.vaadin.Application;
 import com.vaadin.terminal.ThemeResource;
@@ -13,7 +15,8 @@ import com.vaadin.ui.Window;
 
 import cz.magix.maarifa.Neo4jUtils;
 
-@Component(value = "maarifaUserInterface")
+@org.springframework.stereotype.Component
+@Scope("session")
 public class MaarifaUserInterface extends Application {
 	private static final long serialVersionUID = 2L;
 
@@ -70,5 +73,9 @@ public class MaarifaUserInterface extends Application {
 		});
 		// mainWindow.setContent(tabs);
 		mainWindow.addComponent(tabs);
+	}
+	
+	@PreDestroy
+	public void destroy() {
 	}
 }

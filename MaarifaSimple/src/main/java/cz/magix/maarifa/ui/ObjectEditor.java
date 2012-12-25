@@ -38,7 +38,6 @@ import com.vaadin.ui.Window;
 
 import cz.magix.maarifa.model.AbstractObject;
 import cz.magix.maarifa.ui.annotation.UiParams;
-import cz.magix.maarifa.util.NameUtil;
 
 @org.springframework.stereotype.Component
 @Scope("prototype")
@@ -291,7 +290,7 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	 */
 	@Override
 	public Field createField(Item item, Object propertyId, Component uiContext) {
-		String id = (String) propertyId;
+		//String id = (String) propertyId;
 		Class<?> type = item.getItemProperty(propertyId).getType(); 
 		
 		// Working values
