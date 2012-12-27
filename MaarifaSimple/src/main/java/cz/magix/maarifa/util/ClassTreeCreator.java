@@ -40,6 +40,7 @@ public class ClassTreeCreator<T> {
 		Reflections reflections = new Reflections(baseClass.getPackage().getName());
 		Set<Class<? extends T>> modelClasses = reflections.getSubTypesOf(baseClass);
 
+		// TODO: vybrat jen ty, pomoci ktery lze spojit dva oznacene objekty !!!
 		// TODO: polozky ve strome by to chtelo setridit
 		for (Class<? extends T> item : modelClasses) {
 			classTree.addItem(item);
