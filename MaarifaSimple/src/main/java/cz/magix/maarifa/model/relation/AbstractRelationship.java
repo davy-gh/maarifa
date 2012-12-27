@@ -1,9 +1,9 @@
-package cz.magix.maarifa.model;
+package cz.magix.maarifa.model.relation;
 
 import java.util.Date;
 
 public abstract class AbstractRelationship {
-	private Class<? extends AbstractRelationship> pairRelationship;
+	protected Class<? extends AbstractRelationship> pairRelationship;
 	
 	private Date validFrom;
 	
@@ -14,14 +14,6 @@ public abstract class AbstractRelationship {
 	 */
 	public Date getValidFrom() {
 		return validFrom;
-	}
-
-	public Class<? extends AbstractRelationship> getPairRelationship() {
-		return pairRelationship;
-	}
-
-	public void setPairRelationship(Class<? extends AbstractRelationship> pairRelationship) {
-		this.pairRelationship = pairRelationship;
 	}
 
 	public void setValidFrom(Date validFrom) {

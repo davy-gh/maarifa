@@ -36,7 +36,7 @@ import com.vaadin.ui.Select;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 
-import cz.magix.maarifa.model.AbstractObject;
+import cz.magix.maarifa.model.object.AbstractObject;
 import cz.magix.maarifa.ui.annotation.UiParams;
 
 @org.springframework.stereotype.Component

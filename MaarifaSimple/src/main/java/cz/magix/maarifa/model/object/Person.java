@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
-import cz.magix.maarifa.model.AbstractObject;
 import cz.magix.maarifa.model.constants.Country;
 import cz.magix.maarifa.ui.annotation.UiParams;
 

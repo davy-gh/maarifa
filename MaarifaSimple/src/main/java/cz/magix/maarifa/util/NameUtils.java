@@ -1,6 +1,6 @@
 package cz.magix.maarifa.util;
 
-public class NameUtil {
+public class NameUtils {
 	/**
 	 * TODO: doc it
 	 * 

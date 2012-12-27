@@ -2,7 +2,7 @@ package cz.magix.maarifa.model.object.virtual;
 
 import org.joda.time.DateTime;
 
-import cz.magix.maarifa.model.AbstractObject;
+import cz.magix.maarifa.model.object.AbstractObject;
 
 public class NewsArticle extends AbstractObject {
 	private String title;

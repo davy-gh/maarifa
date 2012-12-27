@@ -30,7 +30,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.Notification;
 
-import cz.magix.maarifa.model.AbstractObject;
+import cz.magix.maarifa.model.object.AbstractObject;
 import cz.magix.maarifa.ui.window.ObjectSearchWindow;
 import cz.magix.maarifa.ui.window.RelationshipEditorWindow;
 
