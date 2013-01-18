@@ -105,7 +105,7 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 					editorForm.commit();
 
 					BeanItem<? extends AbstractObject> beanItem = (BeanItem<? extends AbstractObject>) editorForm.getItemDataSource();
-					BeanContainer<Long, AbstractObject> beanContainer = (BeanContainer<Long, AbstractObject>) objectListManager.getUserTable().getContainerDataSource();
+					BeanContainer<Long, AbstractObject> beanContainer = (BeanContainer<Long, AbstractObject>) objectListManager.getObjectTable().getContainerDataSource();
 
 					if (beanItem != null) {
 						//TODO: predelat na annotace
@@ -332,7 +332,7 @@ public class ObjectEditor extends Window implements FormFieldFactory {
 	 */
 	public void resetToEdit() {
 		// Get actual value
-		Object object = objectListManager.getUserTable().getValue();
+		Object object = objectListManager.getObjectTable().getValue();
 		
 		// Set class
 		typeOfObject.setValue(object.getClass());

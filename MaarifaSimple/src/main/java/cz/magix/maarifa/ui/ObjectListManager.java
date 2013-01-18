@@ -303,7 +303,7 @@ public class ObjectListManager extends VerticalLayout {
 	/*
 	 * Getters & Setters
 	 */
-	public Table getUserTable() {
+	public Table getObjectTable() {
 		return objectsTable;
 	}
 }

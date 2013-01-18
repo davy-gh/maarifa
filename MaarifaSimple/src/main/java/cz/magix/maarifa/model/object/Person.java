@@ -44,6 +44,9 @@ public class Person extends AbstractObject {
 	@UiParams(position = 7)
 	private String[] additionalName;
 
+	@UiParams(position = 7)
+	private String[] oldName;
+
 	@UiParams(position = 8)
 	private String[] aliasName;
 

@@ -24,7 +24,10 @@ public class AbstractObject {
 		this.nodeId = nodeId;
 	}
 
-	public String getNodeDescription() {
+	/*
+	 * Helper methods
+	 */
+	public String getDescription() {
 		return toString();
 	}
 
@@ -42,11 +45,11 @@ public class AbstractObject {
 			output.append(field.getName());
 			output.append("=");
 
-			try {
-				output.append(BeanUtils.getPropertyDescriptor(this.getClass(), field.getName()).getReadMethod().invoke(this));
-			} catch (IllegalArgumentException | IllegalAccessException | BeansException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				output.append(BeanUtils.getPropertyDescriptor(this.getClass(), field.getName()).getReadMethod().invoke(this));
+//			} catch (IllegalArgumentException | IllegalAccessException | BeansException | InvocationTargetException e) {
+//				e.printStackTrace();
+//			}
 
 			output.append(", ");
 		}

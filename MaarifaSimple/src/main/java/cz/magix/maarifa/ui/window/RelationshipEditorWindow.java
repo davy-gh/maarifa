@@ -14,6 +14,9 @@ import cz.magix.maarifa.ui.composite.RelationshipEditorComposite;
 public class RelationshipEditorWindow extends Window {
 	private static final long serialVersionUID = 1L;
 
+//	@Autowired
+//	private ObjectListManager objectListManager; 
+	
 	@Autowired
 	private RelationshipEditorComposite relationshipEditorComposite;
 	
@@ -35,6 +38,19 @@ public class RelationshipEditorWindow extends Window {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				close();
+			}
+		});
+
+		relationshipEditorComposite.getSelectButton().addListener(new ClickListener() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				//TODO: check if still two object are selected
+				//objectListManager.getObjectTable().getValue();
+				
+				//TODO: connect them by relationship
+			
 			}
 		});
 	}
