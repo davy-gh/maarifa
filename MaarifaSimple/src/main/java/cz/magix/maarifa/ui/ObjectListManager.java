@@ -28,10 +28,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.Notification;
 
 import cz.magix.maarifa.model.object.AbstractObject;
-import cz.magix.maarifa.ui.window.ObjectSearchWindow;
+import cz.magix.maarifa.ui.composite.ObjectSearchComposite;
+import cz.magix.maarifa.ui.composite.ObjectEditor;
 import cz.magix.maarifa.ui.window.RelationshipEditorWindow;
 
 @Component
@@ -47,10 +49,13 @@ public class ObjectListManager extends VerticalLayout {
 	private Neo4jTemplate neo4j;
 
 	@Autowired
-	private ObjectEditor userEditor;
+	private ObjectEditor objectEditor;
 
 	@Autowired
-	private ObjectSearchWindow objectSearchWindow;
+	private ObjectSearchComposite objectSearchComposite;
+	
+//	@Autowired
+//	private ObjectSearchWindow objectSearchWindow;
 
 	@Autowired
 	private RelationshipEditorWindow relationshipEditorWindow;
@@ -116,10 +121,13 @@ public class ObjectListManager extends VerticalLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				userEditor.setPositionX(100);
-				userEditor.setPositionY(100);
+				objectEditor.setParent(null);
+				Window objectEditorWindow = new Window("objectEditor", objectEditor); 
+				
+				objectEditorWindow.setPositionX(100);
+				objectEditorWindow.setPositionY(100);
 
-				getApplication().getMainWindow().addWindow(userEditor);
+				getApplication().getMainWindow().addWindow(objectEditorWindow);
 			}
 		});
 		objectManagerToolbar.addComponent(newUserButton);
@@ -133,13 +141,16 @@ public class ObjectListManager extends VerticalLayout {
 			// @SuppressWarnings("unchecked")
 			@Override
 			public void buttonClick(ClickEvent event) {
-				userEditor.setPositionX(100);
-				userEditor.setPositionY(100);
+				objectEditor.setParent(null);
+				Window objectEditorWindow = new Window("objectEditor", objectEditor); 
 
-				getApplication().getMainWindow().addWindow(userEditor);
+				objectEditorWindow.setPositionX(100);
+				objectEditorWindow.setPositionY(100);
 
-				// Reset to edit
-				userEditor.resetToEdit();
+				getApplication().getMainWindow().addWindow(objectEditorWindow);
+
+				// TODO: Reset to edit
+				//objectEditor.resetToEdit();
 			}
 		});
 		editUserButton.setEnabled(false);
@@ -173,7 +184,8 @@ public class ObjectListManager extends VerticalLayout {
 			@Override
 			@Transactional
 			public void buttonClick(ClickEvent event) {
-				getApplication().getMainWindow().addWindow(objectSearchWindow);
+				
+				getApplication().getMainWindow().addWindow(new Window("objectSearchComposite", objectSearchComposite));
 			}
 		});
 		objectManagerToolbar.addComponent(findButton);

@@ -1,5 +1,6 @@
 package cz.magix.maarifa.model.object;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
@@ -45,11 +46,16 @@ public class AbstractObject {
 			output.append(field.getName());
 			output.append("=");
 
-//			try {
-//				output.append(BeanUtils.getPropertyDescriptor(this.getClass(), field.getName()).getReadMethod().invoke(this));
-//			} catch (IllegalArgumentException | IllegalAccessException | BeansException | InvocationTargetException e) {
-//				e.printStackTrace();
-//			}
+			PropertyDescriptor propertyDescriptor = BeanUtils.getPropertyDescriptor(this.getClass(), field.getName());
+
+			if (propertyDescriptor.getReadMethod() != null) {
+				try {
+					output.append(propertyDescriptor.getReadMethod().invoke(this));
+				} catch (BeansException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
 			output.append(", ");
 		}
